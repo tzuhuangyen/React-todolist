@@ -1,7 +1,9 @@
 import axios from "axios";
 import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-
+import "../utilits/handleResState";
+import handleResState from "../utilits/handleResState";
+import Swal from "sweetalert2";
 const { VITE_APP_HOST } = import.meta.env;
 axios.defaults.baseURL = VITE_APP_HOST;
 
@@ -14,6 +16,7 @@ function Register() {
     password: "",
     nickname: [],
     passwordCheck: "",
+    //確認user數入的密碼是否相同 並不用送到serve
   });
 
   function handleInput(e) {
@@ -28,12 +31,31 @@ function Register() {
       //console.log("register");
       console.log(form);
       //console.log(`https://todolist-api.hexschool.io/users/sign_up`);
-      const res = await axios.post(`/users/sign_up`, form).then((res) => {
-        console.log(res);
-        alert("Register Successful");
+      const { passwordCheck, ...dataToSend } = form;
+      //這樣做的目的是為了將表單資料傳送到伺服器進行註冊，但不包含確認密碼。
+      //因為確認密碼不需要傳送到伺服器，只是用來在前端進行密碼驗證。
+      //所以在這裡， dataToSend  是一個不包含passwordCheck的註冊資料並傳送到伺服器。
+      if (form.password !== passwordCheck) {
+        handleResState("error", "Sign up Failed", "password are different");
+        return;
+      }
+      const res = await axios.post(`/users/sign_up`, dataToSend).then((res) => {
+        console.log(res.status);
+        if (res.status) {
+          Swal.fire({
+            toast: true,
+            position: "top-end",
+            icon: "success",
+            title: "Sign up Success",
+            showConfirmButton: false,
+            timer: 1000,
+          });
+        }
         navigate("/auth/login");
       });
-    } catch (error) {}
+    } catch (error) {
+      handleResState("error", "註冊失敗", error.res.data.message);
+    }
   };
 
   return (

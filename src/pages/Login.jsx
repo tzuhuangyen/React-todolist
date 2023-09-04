@@ -1,11 +1,14 @@
 import axios from "axios";
 import { useState } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
 
 const { VITE_APP_HOST } = import.meta.env;
 axios.defaults.baseURL = VITE_APP_HOST;
 
 //登入sign in
 function Login() {
+  const navigate = useNavigate();
+
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -72,9 +75,9 @@ function Login() {
           }}
           value="登入"
         />
-        <a className="formControls_btnLink" href="#signUpPage">
+        <NavLink className="formControls_btnLink" to="/register">
           註冊帳號
-        </a>
+        </NavLink>
       </form>{" "}
     </>
   );

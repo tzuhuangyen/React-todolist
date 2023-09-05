@@ -319,11 +319,11 @@ nav ul a span {
   }
 }
 
-@media (max-width: 576px) {
+/* @media (max-width: 576px) {
   .d-m-n {
     display: none;
   }
-}
+} */
 
 .formControls {
   margin-left: 100px;

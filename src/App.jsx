@@ -1,25 +1,24 @@
-import { useState } from "react";
 import { Route, Routes, NavLink } from "react-router-dom";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
-import Todo from "./pages/Todo";
+import Todos from "./pages/Todos";
 import "./App.css";
+import Auth from "./pages/Auth";
 
 function App() {
-  //const [count, setCount] = useState(0);
-
   return (
     <>
       {/* <!-- login_page --> */}
       <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/todo" element={<Todo />} />
+        {/* {共用版型} */}
+        <Route path="/" element={<Auth />}>
+          {/* {共用版型/Login} */}
+          <Route index element={<Login />} />
+          {/* {共用版型/Register} */}
+          <Route path="register" element={<Register />} />
+        </Route>
+        <Route path="/todos" element={<Todos />} />
       </Routes>
-
-      {/*<!-- sign up /Register -->*/}
-
-      {/* <!-- ToDo List --> */}
     </>
   );
 }

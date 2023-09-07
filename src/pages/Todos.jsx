@@ -6,6 +6,7 @@ import handleResState from "../utilits/handleResState";
 //import Loading from "../utilits/Loading";
 const { VITE_APP_HOST } = import.meta.env;
 console.log(VITE_APP_HOST);
+
 function Todos() {
   const [todos, setTodos] = useState([]);
   //const [toggleState, setToggleState] = useState("全部");
@@ -13,7 +14,10 @@ function Todos() {
   const navigate = useNavigate();
   const [newTodo, setNewTodo] = useState("");
   const [showTodo, setShowTodos] = useState([]);
+  const [editContent, setEditContent] = useState("");
+  const [isEditing, setIsEditing] = useState(null);
   const [filter, setFilter] = useState("");
+  //const [todoEdit, setTodoEdit] = useState({});
   //axios.defaults.headers.common["Authorization"] = `Bearer ${cookieToken}`;
   const cookieToken = document.cookie
     .split(";")
@@ -70,7 +74,7 @@ function Todos() {
           Authorization: cookieToken,
         },
       });
-      console.log(res.data.data);
+      console.log("Updated todos:", res.data.data);
       setTodos(res.data.data);
     } catch (error) {
       console.error("Error fetching todos:", error);
@@ -137,16 +141,72 @@ function Todos() {
     });
   };
 
-  //變更狀態
-  const toggleTodo = async (id) => {
+  //變更待辦狀態
+  const toggleStatus = async (id) => {
     try {
-      const rest = await axios.patch(`${VITE_APP_HOST}/todos/${id}/toggle`);
+      const rest = await axios.patch(
+        `${VITE_APP_HOST}/todos/${id}/toggle`,
+        {},
+        {
+          headers: {
+            Authorization: cookieToken,
+          },
+        }
+      );
       getTodos();
     } catch (error) {
       handleResState("error", "edit Failed");
     }
   };
 
+  //更新待辦事項
+  const updateTodo = async (id, content) => {
+    const updateTodoList = todos.find((todo) => todo.id === id);
+    updateTodoList.content = content;
+
+    try {
+      const res = await axios.put(
+        `${VITE_APP_HOST}/todos/${id}`,
+        {
+          content: content,
+        },
+        {
+          headers: {
+            Authorization: cookieToken,
+          },
+        }
+      );
+      console.log(res);
+      getTodos();
+      setEditContent({
+        ...editContent,
+        [id]: "",
+      });
+      setIsEditing(null);
+    } catch (error) {
+      handleResState("error", "update Failed");
+    }
+  };
+  //刪除待辦
+  const deleteTodo = async (id) => {
+    console.log(`Deleting todo with id: ${id}`);
+    try {
+      const res = await axios.delete(`${VITE_APP_HOST}/todos/${id}`, {
+        headers: {
+          Authorization: cookieToken,
+        },
+      });
+
+      getTodos();
+    } catch (error) {
+      handleResState("error", error.response.data.message);
+    }
+  };
+
+  //刪除單一待辦事項
+  const handleDeleteTodo = (id) => {
+    deleteTodo(id);
+  };
   return (
     <>
       {" "}
@@ -177,7 +237,6 @@ function Todos() {
                   setNewTodo(e.target.value);
                 }}
               />
-              {/*ref={newTodo}*/}
               <button className="formControls_btnLink" onClick={addTodo}>
                 <i className="fa fa-plus"></i>
               </button>
@@ -206,94 +265,50 @@ function Todos() {
                     return (
                       <>
                         <li key={todo.id}>
-                          <label className="todoList_label">
+                          {isEditing === todo.id ? (
                             <input
-                              className="todoList_input"
-                              type="checkbox"
-                              value="true"
-                              checked={todo.status}
-                              onChange={() => toggleTodo(todo.id)}
+                              value={editContent[todo.id] || todo.content}
+                              onChange={(e) => {
+                                // 啟動編輯模式
+                                setEditContent({
+                                  ...editContent,
+                                  [todo.id]: e.target.value,
+                                });
+                              }}
+                              onKeyPress={(e) => {
+                                if (e.key === "Enter") {
+                                  updateTodo(todo.id, editContent[todo.id]);
+                                }
+                              }}
                             />
-                            <span>{todo.content}</span>
-                          </label>
-                          <a href="#">
-                            <i className="fa fa-times"></i>
-                          </a>
+                          ) : (
+                            <label className="todoList_label">
+                              <input
+                                className="todoList_input"
+                                type="checkbox"
+                                value="true"
+                                checked={todo.status}
+                                onChange={() => toggleStatus(todo.id)}
+                              />
+
+                              <span
+                                onClick={() => {
+                                  setIsEditing(todo.id);
+                                }}
+                              >
+                                {todo.content}
+                              </span>
+                            </label>
+                          )}
                         </li>
                       </>
                     );
                   })}
-
-                  {/* <li>
-                    <label className="todoList_label">
-                      <input
-                        className="todoList_input"
-                        type="checkbox"
-                        value="true"
-                      />
-                      <span>打電話叫媽媽匯款給我</span>
-                    </label>
-                    <a href="#">
-                      <i className="fa fa-times"></i>
-                    </a>
-                  </li>
-                  <li>
-                    <label className="todoList_label">
-                      <input
-                        className="todoList_input"
-                        type="checkbox"
-                        value="true"
-                      />
-                      <span>整理電腦資料夾</span>
-                    </label>
-                    <a href="#">
-                      <i className="fa fa-times"></i>
-                    </a>
-                  </li>
-                  <li>
-                    <label className="todoList_label">
-                      <input
-                        className="todoList_input"
-                        type="checkbox"
-                        value="true"
-                      />
-                      <span>繳電費水費瓦斯費</span>
-                    </label>
-                    <a href="#">
-                      <i className="fa fa-times"></i>
-                    </a>
-                  </li>
-                  <li>
-                    <label className="todoList_label">
-                      <input
-                        className="todoList_input"
-                        type="checkbox"
-                        value="true"
-                      />
-                      <span>約vicky禮拜三泡溫泉</span>
-                    </label>
-                    <a href="#">
-                      <i className="fa fa-times"></i>
-                    </a>
-                  </li>
-                  <li>
-                    <label className="todoList_label">
-                      <input
-                        className="todoList_input"
-                        type="checkbox"
-                        value="true"
-                      />
-                      <span>約ada禮拜四吃晚餐</span>
-                    </label>
-                    <a href="#">
-                      <i className="fa fa-times"></i>
-                    </a>
-                  </li> */}
                 </ul>
                 <div className="todoList_statistics">
                   <p>
                     {" "}
-                    {todos.filter((item) => item.status === false).length}{" "}
+                    {todos.filter((item) => item.status === true).length}{" "}
                     個已完成項目
                   </p>
                   <a href="#">清除已完成項目</a>

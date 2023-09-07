@@ -519,6 +519,8 @@ nav ul a span {
   height: 47px;
   font-size: 1rem;
   padding-left: 16px;
+
+  color: red;
 }
 
 .inputBox a {

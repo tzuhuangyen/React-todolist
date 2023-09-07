@@ -45,7 +45,7 @@ function Register() {
             toast: true,
             position: "center",
             icon: "success",
-            title: "Sign up Success",
+            title: "Register Success",
             showConfirmButton: false,
             timer: 1000,
           });

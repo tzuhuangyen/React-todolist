@@ -26,31 +26,33 @@ function Login() {
   const login = async () => {
     console.log("sign in");
     console.log(form);
-    setIsLoading(true);
+    //setIsLoading(true);
     try {
       //console.log("register");
       //console.log(form);
       //console.log(`https://todolist-api.hexschool.io/users/sign_up`);
-      const res = await axios.post(`/users/sign_in`, form).then((res) => {
-        console.log(res.status);
-        const { token } = res.data;
-        //console.log(token);
-        document.cookie = `token:${token}`;
-        if (res.status) {
-          Swal.fire({
-            toast: true,
-            position: "center",
-            icon: "success",
-            title: "Log in Success",
-            showConfirmButton: false,
-            timer: 1000,
-          });
-        }
-        navigate("/todos");
-        setIsLoading(false);
-      });
+      const res = await axios
+        .post(`${VITE_APP_HOST}/users/sign_in`, form)
+        .then((res) => {
+          console.log(res.status);
+          const { token } = res.data;
+          //console.log(token);
+          document.cookie = `token=${token}`;
+          if (res.status) {
+            Swal.fire({
+              toast: true,
+              position: "center",
+              icon: "success",
+              title: "Log in Success",
+              showConfirmButton: false,
+              timer: 1000,
+            });
+          }
+          navigate("/todos");
+          //setIsLoading(false);
+        });
     } catch (error) {
-      handleResState("error", "登入失敗", error.res.data.message);
+      handleResState("error", "登入失敗", error.response.data.message);
     }
   };
 

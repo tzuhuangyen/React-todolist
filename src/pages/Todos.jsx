@@ -299,7 +299,7 @@ function Todos() {
             Authorization: cookieToken,
           },
         });
-        console.log(res);
+        console.log(res.data.nickname);
         setNickname(res.data.nickname);
         getTodos();
       } catch (error) {
@@ -402,7 +402,7 @@ function Todos() {
           </h1>
           <ul>
             <li className="todo_sm">
-              <span>{todos.nickname}的代辦</span>
+              <span>{nickname}的代辦</span>
             </li>
             <li>
               <button className="logoutButton " onClick={logout}>

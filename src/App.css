@@ -545,6 +545,14 @@ nav ul a span {
   -webkit-box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.15);
   box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.15);
 }
+.todolist-tab a {
+  color: #9f9a91;
+  line-height: 20px;
+  font-weight: 700;
+  text-align: center;
+  padding: 16px;
+  font-size: 24px;
+}
 
 .todoList_list .todoList_tab {
   display: -webkit-box;
@@ -553,6 +561,8 @@ nav ul a span {
   -webkit-box-pack: space-evenly;
   -ms-flex-pack: space-evenly;
   justify-content: space-evenly;
+  padding: 8px;
+  margin-top: 8px;
 }
 
 .todoList_list .todoList_tab li {
@@ -571,7 +581,7 @@ nav ul a span {
 }
 
 .todoList_list .todoList_tab .active {
-  color: #333333;
+  color: #333;
   border-bottom: 2px solid #333333;
 }
 
@@ -584,8 +594,11 @@ nav ul a span {
 
 .todoList_list .todoList_items .todoList_item {
   margin-bottom: 8px;
+  display: flex;
 }
-
+.flex-direction-column {
+  flex-direction: column;
+}
 .todoList_list .todoList_items .todoList_label {
   width: 100%;
   display: -webkit-box;
@@ -599,7 +612,11 @@ nav ul a span {
   color: #333333;
   line-height: 20.27px;
 }
-
+.todoList_list ul {
+  padding-top: 16px;
+  display: flex;
+  justify-content: space-around;
+}
 .todoList_list .todoList_items .todoList_input {
   width: 20px;
   height: 20px;
@@ -631,8 +648,11 @@ nav ul a span {
   font-size: 14px;
   color: #333333;
   opacity: 0;
+  margin-bottom: 20px;
 }
-
+.todoList_list .todoList_tab .tabbtn {
+  color: #0d1cbe;
+}
 .todoList_list .todoList_items li:hover a {
   opacity: 1;
 }

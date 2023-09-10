@@ -13,9 +13,14 @@ const cookieToken = document.cookie
   ?.split("=")[1];
 axios.defaults.headers.common["Authorization"] = cookieToken;
 
+const handleList = (e) => {
+  setTab(e.target.textContent);
+};
+
 const List = ({ todos, getTodos }) => {
-  const [filterStatus, setFilterStatus] = useState(todos);
   const [tab, setTab] = useState("all");
+
+  const [filterStatus, setFilterStatus] = useState(todos);
   // 点击待办事项文本时触发编辑模式
   const setEditModeForItem = (id) => {
     setEditMode(id);
@@ -37,10 +42,6 @@ const List = ({ todos, getTodos }) => {
       setFilterStatus(todos.filter((todo) => todo.status));
     }
   }, [tab]);
-
-  const handleList = (e) => {
-    setTab(e.target.textContent);
-  };
 
   // 切換待辦事項狀態
   const toggleStatus = async (id) => {
@@ -147,171 +148,126 @@ const List = ({ todos, getTodos }) => {
 
   return (
     <div>
-      {/* {選染待辦清單} */} {/* {選染頁籤} */}
-      {/* <div className="todoList_list">
-        <ul>
-          <li
-            className="todolist-tab"
-            style={
-              tab == "all"
-                ? {
-                    color: "#333333",
-                    borderBottom: "2px solid #333333",
-                  }
-                : null
-            }
-          >
-            <NavLink onClick={handleList}>all</NavLink>
-          </li>
-          <li
-            className="todolist-tab"
-            style={
-              tab == "doing"
-                ? {
-                    color: "#333333",
-                    borderBottom: "2px solid #333333",
-                  }
-                : null
-            }
-          >
-            <NavLink onClick={handleList}>doing</NavLink>
-          </li>
-          <li
-            className="todolist-tab"
-            style={
-              tab == "done"
-                ? {
-                    color: "#333333",
-                    borderBottom: "2px solid #333333",
-                  }
-                : null
-            }
-          >
-            <NavLink onClick={handleList}>done</NavLink>
-          </li>
-        </ul>
-        </div> */}
-      {todos.length === 0 ? (
-        <div className="todoList_list">
-          {/* {選染頁籤} */}
-
-          <li
-            className="todoList_label"
-            style={{ justifyContent: "space-around", cursor: "auto" }}
-          >
-            目前尚無項目
-          </li>
-        </div>
-      ) : (
-        <>
-          <div className="todoList_list">
-            {/* {選染頁籤} */}
-            <ul>
-              <li
-                className="todolist-tab"
-                style={
-                  tab == "all"
-                    ? {
-                        color: "#333333",
-                        borderBottom: "2px solid #333333",
-                      }
-                    : null
+      {/* {選染頁籤} */}
+      <ul>
+        <li
+          className="todolist-tab"
+          style={
+            tab == "all"
+              ? {
+                  color: "#333333",
+                  borderBottom: "2px solid #333333",
                 }
-              >
-                <NavLink onClick={handleList}>all</NavLink>
-              </li>
-              <li
-                className="todolist-tab"
-                style={
-                  tab == "doing"
-                    ? {
-                        color: "#333333",
-                        borderBottom: "2px solid #333333",
-                      }
-                    : null
+              : null
+          }
+        >
+          <NavLink onClick={handleList}>all</NavLink>
+        </li>
+        <li
+          className="todolist-tab"
+          style={
+            tab == "doing"
+              ? {
+                  color: "#333333",
+                  borderBottom: "2px solid #333333",
                 }
-              >
-                <NavLink onClick={handleList}>doing</NavLink>
-              </li>
-              <li
-                className="todolist-tab"
-                style={
-                  tab == "done"
-                    ? {
-                        color: "#333333",
-                        borderBottom: "2px solid #333333",
-                      }
-                    : null
+              : null
+          }
+        >
+          <NavLink onClick={handleList}>doing</NavLink>
+        </li>
+        <li
+          className="todolist-tab"
+          style={
+            tab == "done"
+              ? {
+                  color: "#333333",
+                  borderBottom: "2px solid #333333",
                 }
-              >
-                <NavLink onClick={handleList}>done</NavLink>
-              </li>
-            </ul>
-            {/* {選染事項list} */}
-            <div className="todoList_items">
-              <ul className="todoList_item flex-direction-column">
-                {filterStatus.map((item) => {
-                  return (
-                    <li key={item.id}>
-                      <div className="todoList_label ">
-                        <input
-                          id={item.id}
-                          type="checkbox"
-                          className="todoList_input"
-                          value={item.status}
-                          checked={item.status}
-                          onChange={() => toggleStatus(item.id)}
-                        />
-                        {editMode === item.id ? (
-                          <>
-                            <input
-                              type="text"
-                              value={editContent}
-                              onChange={(e) => setEditContent(e.target.value)}
-                              onKeyDown={(e) => keyDownToUpdate(e, item.id)}
-                            />
-                            <button
-                              className="formControls_btnLink"
-                              onClick={(e) => updateTodo(item.id)}
+              : null
+          }
+        >
+          <NavLink onClick={handleList}>done</NavLink>
+        </li>
+      </ul>
+      {/* {選染待辦清單} */}
+      <div className="todoList_items">
+        <ul className="todoList_item">
+          {todos.length === 0 ? (
+            <li
+              className="todoList_label"
+              style={{ justifyContent: "space-around", cursor: "auto" }}
+            >
+              目前尚無項目
+            </li>
+          ) : (
+            <>
+              {/* {選染事項list} */}
+              <div className="todoList_items">
+                <ul className="todoList_item flex-direction-column">
+                  {filterStatus.map((item) => {
+                    return (
+                      <li key={item.id}>
+                        <div className="todoList_label ">
+                          <input
+                            id={item.id}
+                            type="checkbox"
+                            className="todoList_input"
+                            value={item.status}
+                            checked={item.status}
+                            onChange={() => toggleStatus(item.id)}
+                          />
+                          {editMode === item.id ? (
+                            <>
+                              <input
+                                type="text"
+                                value={editContent}
+                                onChange={(e) => setEditContent(e.target.value)}
+                                onKeyDown={(e) => keyDownToUpdate(e, item.id)}
+                              />
+                              <button
+                                className="formControls_btnLink"
+                                onClick={(e) => updateTodo(item.id)}
+                              >
+                                修改
+                              </button>
+                              <button
+                                className="formControls_btnLink"
+                                onClick={(e) => setEditMode(null)}
+                              >
+                                取消
+                              </button>
+                            </>
+                          ) : (
+                            // 否则，显示待办事项文本
+                            <label
+                              htmlFor={item.id}
+                              onClick={() => setEditModeForItem(item.id)}
                             >
-                              修改
-                            </button>
-                            <button
-                              className="formControls_btnLink"
-                              onClick={(e) => setEditMode(null)}
-                            >
-                              取消
-                            </button>
-                          </>
-                        ) : (
-                          // 否则，显示待办事项文本
-                          <label
-                            htmlFor={item.id}
-                            onClick={() => setEditModeForItem(item.id)}
-                          >
-                            {item.content}
-                          </label>
-                        )}
-                        <span onClick={(e) => setEditMode(item.id)}></span>
-                      </div>
-                      <a onClick={(e) => deleteTodo(item.id)}>
-                        <i className="fa fa-times"></i>
-                      </a>
-                    </li>
-                  );
-                })}
-              </ul>
-              <div className="todoList_statistics">
-                <p>
-                  {todos?.filter((item) => item.status).length}
-                  個已完成項目
-                </p>
-                <a onClick={deleteAllDone}>清除已完成項目</a>
+                              {item.content}
+                            </label>
+                          )}
+                          <span onClick={(e) => setEditMode(item.id)}></span>
+                        </div>
+                        <a onClick={(e) => deleteTodo(item.id)}>
+                          <i className="fa fa-times"></i>
+                        </a>
+                      </li>
+                    );
+                  })}
+                </ul>
+                <div className="todoList_statistics">
+                  <p>
+                    {todos?.filter((item) => item.status).length}
+                    個已完成項目
+                  </p>
+                  <a onClick={deleteAllDone}>清除已完成項目</a>
+                </div>
               </div>
-            </div>
-          </div>
-        </>
-      )}
+            </>
+          )}
+        </ul>
+      </div>
     </div>
   );
 
@@ -320,6 +276,7 @@ const List = ({ todos, getTodos }) => {
 
 function Todos() {
   const navigate = useNavigate();
+  const [tab, setTab] = useState("all");
 
   const [nickname, setNickname] = useState("");
   const [todos, setTodos] = useState([]);
@@ -327,6 +284,8 @@ function Todos() {
   const [message, setMessage] = useState("");
   const [editContent, setEditContent] = useState("");
   //驗證登入token並取得暱稱
+  console.log("Authorization Token:", cookieToken);
+
   useEffect(() => {
     (async () => {
       try {
@@ -478,7 +437,9 @@ function Todos() {
                 editContent={editContent}
                 setEditContent={setEditContent}
               />
-            ) : null}
+            ) : (
+              <p>沒有待辦事項</p>
+            )}
           </div>
         </div>
       </div>
@@ -488,3 +449,58 @@ function Todos() {
 }
 
 export default Todos;
+{
+  /* <>
+  <ul>
+    <li
+      className="todolist-tab"
+      style={
+        tab == "all"
+          ? {
+              color: "#333333",
+              borderBottom: "2px solid #333333",
+            }
+          : null
+      }
+    >
+      <NavLink onClick={handleList}>all</NavLink>
+    </li>
+    <li
+      className="todolist-tab"
+      style={
+        tab == "doing"
+          ? {
+              color: "#333333",
+              borderBottom: "2px solid #333333",
+            }
+          : null
+      }
+    >
+      <NavLink onClick={handleList}>doing</NavLink>
+    </li>
+    <li
+      className="todolist-tab"
+      style={
+        tab == "done"
+          ? {
+              color: "#333333",
+              borderBottom: "2px solid #333333",
+            }
+          : null
+      }
+    >
+      <NavLink onClick={handleList}>done</NavLink>
+    </li>
+  </ul>
+  // <div className="todoList_items">
+  //   <ul className="todoList_item">
+  //     <li
+  //       className="todoList_label"
+  //       style={{ justifyContent: "space-around", cursor: "auto" }}
+  //     >
+  //       目前尚無項目
+  //     </li>
+  //   </ul>
+  // </div>
+    </>;*/
+}

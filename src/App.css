@@ -603,6 +603,7 @@ nav ul a span {
   -webkit-box-pack: justify;
   -ms-flex-pack: justify;
   justify-content: space-between;
+  cursor: pointer;
 }
 
 .todoList_list .todoList_statistics p {

@@ -256,7 +256,9 @@ const List = ({ todos, getTodos }) => {
                     {todos?.filter((item) => item.status).length}
                     個已完成項目
                   </p>
-                  <a onClick={deleteAllDone}>清除已完成項目</a>
+                  <a className="formControls_btnSubmit" onClick={deleteAllDone}>
+                    清除已完成項目
+                  </a>
                 </div>
               </div>
             </>

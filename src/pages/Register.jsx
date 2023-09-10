@@ -123,7 +123,7 @@ function Register() {
               value="註冊帳號"
             />
             <NavLink
-              className="nav-link fw-bold text-dark btn btn-outline-secondary mt-3"
+              className="formControls_btnLink nav-link fw-bold text-dark btn btn-outline-secondary mt-3"
               to="/"
             >
               {" "}

@@ -241,6 +241,7 @@ nav ul {
   display: -ms-flexbox;
   display: flex;
   font-size: 1rem;
+  align-items: center;
 }
 
 @media (max-width: 576px) {
@@ -249,10 +250,10 @@ nav ul {
   }
 }
 
-nav ul a {
+nav ul li {
   text-decoration: none;
   color: #333333;
-  margin-left: 24px;
+  margin-left: 14px;
 }
 
 @media (max-width: 576px) {
@@ -302,6 +303,7 @@ nav ul a span {
   font-size: 1.5rem;
   font-weight: bold;
   margin-bottom: 24px;
+  color: #333333;
 }
 
 @media (max-width: 576px) {
@@ -315,6 +317,7 @@ nav ul a span {
   font-size: 0.875rem;
   font-weight: bold;
   margin: 16px 0 4px 0;
+  color: #333333;
 }
 
 .formControls .formControls_input {
@@ -324,6 +327,7 @@ nav ul a span {
   width: 304px;
   padding: 12px 16px;
   margin: 4px 0;
+  color: #e5e5e5;
 }
 
 .formControls .formControls_input:focus {
@@ -335,15 +339,15 @@ nav ul a span {
 }
 
 .formControls .formControls_input:-ms-input-placeholder {
-  color: #9f9a91;
+  color: #ffffff;
 }
 
 .formControls .formControls_input::-ms-input-placeholder {
-  color: #9f9a91;
+  color: #ffffff;
 }
 
 .formControls .formControls_input::placeholder {
-  color: #9f9a91;
+  color: #ffffff;
 }
 
 .formControls .formControls_btnSubmit {
@@ -513,9 +517,7 @@ nav ul a span {
 .todoList_list .todoList_tab li {
   width: 100%;
 }
-.todoList_list .todoList_tab li a {
-  border-bottom: none;
-}
+
 .todoList_list .todoList_tab a {
   display: block;
   color: #9f9a91;

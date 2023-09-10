@@ -402,9 +402,7 @@ function Todos() {
           </h1>
           <ul>
             <li className="todo_sm">
-              <NavLink to="#">
-                <span className="nickname">{todos.nickname}的代辦</span>
-              </NavLink>
+              <span>{todos.nickname}的代辦</span>
             </li>
             <li>
               <button className="logoutButton " onClick={logout}>

@@ -13,7 +13,7 @@ const cookieToken = document.cookie
   ?.split("=")[1];
 axios.defaults.headers.common["Authorization"] = cookieToken;
 
-const handleList = (e) => {
+const handleList = (e, setTab) => {
   setTab(e.target.textContent);
 };
 
@@ -26,7 +26,7 @@ const List = ({ todos, getTodos }) => {
     setEditMode(id);
     setEditContent(""); // 清空编辑内容
   };
-
+  //在todos发生变化时，更新筛选后的状态，并将选项卡设置为"all"。
   useEffect(() => {
     setFilterStatus(todos);
     setTab("all");
@@ -43,7 +43,15 @@ const List = ({ todos, getTodos }) => {
     }
   }, [tab]);
 
-  // 切換待辦事項狀態
+  // const handleTabClick = (status) => {
+  //   setTodos(
+  //     todos.map((todo) =>
+  //       todo.status === status ? { ...todo, status: status } : todo
+  //     )
+  //   );
+  // };
+
+  // 切換checked待辦事項狀態
   const toggleStatus = async (id) => {
     try {
       const rest = await axios.patch(
@@ -145,13 +153,12 @@ const List = ({ todos, getTodos }) => {
       handleResState("error", error.response.data.message);
     }
   };
-
+  //List render
   return (
-    <div>
+    <div className="todoList_list ">
       {/* {選染頁籤} */}
-      <ul>
+      <ul className="todoList_tab">
         <li
-          className="todolist-tab"
           style={
             tab == "all"
               ? {
@@ -161,10 +168,9 @@ const List = ({ todos, getTodos }) => {
               : null
           }
         >
-          <NavLink onClick={handleList}>all</NavLink>
+          <NavLink onClick={(e) => handleList(e, setTab)}>all</NavLink>
         </li>
         <li
-          className="todolist-tab"
           style={
             tab == "doing"
               ? {
@@ -174,10 +180,9 @@ const List = ({ todos, getTodos }) => {
               : null
           }
         >
-          <NavLink onClick={handleList}>doing</NavLink>
+          <NavLink onClick={(e) => handleList(e, setTab)}>doing</NavLink>
         </li>
         <li
-          className="todolist-tab"
           style={
             tab == "done"
               ? {
@@ -187,12 +192,12 @@ const List = ({ todos, getTodos }) => {
               : null
           }
         >
-          <NavLink onClick={handleList}>done</NavLink>
+          <NavLink onClick={(e) => handleList(e, setTab)}>done</NavLink>
         </li>
       </ul>
       {/* {選染待辦清單} */}
       <div className="todoList_items">
-        <ul className="todoList_item">
+        <ul className=" todoList_item">
           {todos.length === 0 ? (
             <li
               className="todoList_label"
@@ -204,11 +209,11 @@ const List = ({ todos, getTodos }) => {
             <>
               {/* {選染事項list} */}
               <div className="todoList_items">
-                <ul className="todoList_item flex-direction-column">
+                <ul className="todoList_item ">
                   {filterStatus.map((item) => {
                     return (
                       <li key={item.id}>
-                        <div className="todoList_label ">
+                        <label className="todoList_label ">
                           <input
                             id={item.id}
                             type="checkbox"
@@ -248,7 +253,7 @@ const List = ({ todos, getTodos }) => {
                             </label>
                           )}
                           <span onClick={(e) => setEditMode(item.id)}></span>
-                        </div>
+                        </label>
                         <a onClick={(e) => deleteTodo(item.id)}>
                           <i className="fa fa-times"></i>
                         </a>
@@ -386,7 +391,9 @@ function Todos() {
   };
   console.log("todos length:", todos.length);
 
+  //todos render
   return (
+    //渲染nav input + List(todolist )
     <div>
       <div id="todoListPage" className="bg-half">
         <nav>
@@ -396,11 +403,13 @@ function Todos() {
           <ul>
             <li className="todo_sm">
               <NavLink to="#">
-                <span>{nickname}的代辦</span>
+                <span className="nickname">{todos.nickname}的代辦</span>
               </NavLink>
             </li>
             <li>
-              <button onClick={logout}>Log out</button>
+              <button className="logoutButton " onClick={logout}>
+                Log out
+              </button>
             </li>
           </ul>
         </nav>
@@ -449,58 +458,3 @@ function Todos() {
 }
 
 export default Todos;
-{
-  /* <>
-  <ul>
-    <li
-      className="todolist-tab"
-      style={
-        tab == "all"
-          ? {
-              color: "#333333",
-              borderBottom: "2px solid #333333",
-            }
-          : null
-      }
-    >
-      <NavLink onClick={handleList}>all</NavLink>
-    </li>
-    <li
-      className="todolist-tab"
-      style={
-        tab == "doing"
-          ? {
-              color: "#333333",
-              borderBottom: "2px solid #333333",
-            }
-          : null
-      }
-    >
-      <NavLink onClick={handleList}>doing</NavLink>
-    </li>
-    <li
-      className="todolist-tab"
-      style={
-        tab == "done"
-          ? {
-              color: "#333333",
-              borderBottom: "2px solid #333333",
-            }
-          : null
-      }
-    >
-      <NavLink onClick={handleList}>done</NavLink>
-    </li>
-  </ul>
-  // <div className="todoList_items">
-  //   <ul className="todoList_item">
-  //     <li
-  //       className="todoList_label"
-  //       style={{ justifyContent: "space-around", cursor: "auto" }}
-  //     >
-  //       目前尚無項目
-  //     </li>
-  //   </ul>
-  // </div>
-    </>;*/
-}
